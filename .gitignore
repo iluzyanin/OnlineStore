@@ -1,6 +1,9 @@
 # Mac OS specific files
 .DS_Store
 
+# .NET Core specific
+project.lock.json
+
 # Build results
 [Bb]in/
 [Oo]bj/
