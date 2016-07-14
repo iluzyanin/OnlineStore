@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": true
+  },
+  "tooling": {
+    "defaultNamespace": "OnlineStore.RestApi"
+  },
+  "dependencies": {
+    "OnlineStore.Core": {
+      "target": "project"
+    },
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0",
+      "type": "platform"
+    },
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
+    "Microsoft.AspNetCore.Owin": "1.0.0",
+    "Nancy": "2.0.0-barneyrubble"
+  },
+  "frameworks": {
+    "netcoreapp1.1": {}
+  }
+}
