@@ -42,7 +42,7 @@ namespace OnlineStore.Tests
             }
 
             [Test]
-            public void When_items_sum_more_than_discount_Should__return_items_minus_discount()
+            public void When_items_sum_more_than_discount_Should_return_items_minus_discount()
             {
                 // Arrange
                 shoppingCart.Items.Add(new Item { Id = 1, Name = "Apple", Price = 3 });
