@@ -23,6 +23,7 @@ namespace OnlineStore.RestApi
             this.Get("/", _ => GetAllItems());
             this.Get("/{id}", parameters => GetItem(parameters.id));
             this.Post("/", parameters => CreateItem(parameters));
+            this.Delete("/{id}", parameters => DeleteItem(parameters.id));
         }
 
         public Negotiator GetAllItems()
@@ -70,16 +71,29 @@ namespace OnlineStore.RestApi
 
             int newId = items.Last().Id + 1;
 
-            items.Add(new Item
-            {
-                Id = newId,
-                Name = newItem.Name,
-                Price = newItem.Price
-            });
+            items.Add(new Item(newId, newItem.Name, newItem.Price));
 
             return Negotiate
                 .WithHeader("Location", $"{Request.Url}/{newId}")
                 .WithStatusCode(HttpStatusCode.Created);
+        }
+
+        public Negotiator DeleteItem(int id)
+        {
+            Item item = items.FirstOrDefault(i => i.Id == id);
+            if (item == null)
+            {
+                return Negotiate
+                    .WithAllowedMediaRange("application/json")
+                    .WithModel(new { Error = $"Item with id = {id} was not found" })
+                    .WithStatusCode(HttpStatusCode.NotFound);
+            }
+
+            items.Remove(item);
+
+            return Negotiate
+                .WithAllowedMediaRange("application/json")
+                .WithStatusCode(HttpStatusCode.NoContent);
         }
     }
 }
