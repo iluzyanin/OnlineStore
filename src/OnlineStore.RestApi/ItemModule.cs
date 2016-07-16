@@ -5,6 +5,7 @@ using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Validation;
 using Nancy.Responses.Negotiation;
+using OnlineStore.Core.Models;
 
 namespace OnlineStore.RestApi
 {
