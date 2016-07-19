@@ -25,6 +25,10 @@ namespace OnlineStore.Core.Models
             }
         }
 
+        public decimal Discount { get; set; }
+
+        public string Coupon { get; set; }
+
         public void AddItem(Item item, int quantity)
         {
             if (item == null)
@@ -47,8 +51,6 @@ namespace OnlineStore.Core.Models
                 this.cartItems.Add(new CartItem(cartItemIndex++, item, quantity));
             }
         }
-
-        public decimal Discount { get; set; }
 
         public decimal CalculateTotalAmount()
         {

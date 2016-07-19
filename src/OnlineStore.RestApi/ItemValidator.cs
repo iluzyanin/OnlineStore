@@ -1,4 +1,5 @@
 using FluentValidation;
+using OnlineStore.RestApi.DataTransfer;
 
 public class ItemValidator : AbstractValidator<NewItemDto>
 {

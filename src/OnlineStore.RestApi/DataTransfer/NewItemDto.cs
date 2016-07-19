@@ -1,5 +1,8 @@
-public class NewItemDto
+namespace OnlineStore.RestApi.DataTransfer
 {
-    public string Name { get; set; }
-    public decimal Price { get; set; }
+    public class NewItemDto
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+    }
 }
