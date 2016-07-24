@@ -7,8 +7,8 @@ namespace OnlineStore.RestApi.Validators
     {
         public CouponValidator()
         {
-            RuleFor(coupon => coupon.Coupon).NotEmpty().WithMessage("Please specify Coupon.");
-            RuleFor(coupon => coupon.Coupon).Length(10).WithMessage("Coupon length must be 10.");
+            RuleFor(coupon => coupon.Code).NotEmpty().WithMessage("Please specify Coupon code.");
+            RuleFor(coupon => coupon.Code).Length(10).WithMessage("Coupon code length must be 10.");
         }
     }
 }

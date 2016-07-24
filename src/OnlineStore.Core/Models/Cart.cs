@@ -27,7 +27,7 @@ namespace OnlineStore.Core.Models
 
         public decimal Discount { get; set; }
 
-        public string Coupon { get; set; }
+        public string CouponCode { get; set; }
 
         public void AddItem(Item item, int quantity)
         {

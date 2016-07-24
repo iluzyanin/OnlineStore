@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nancy;
@@ -12,6 +13,8 @@ namespace OnlineStore.RestApi.Modules
     {
         private static IList<Cart> carts = new List<Cart>();
         private static int cartIndex = 1;
+
+        private static string[] couponCodes = new[] { "ABCDE12345", "TESTCOUPON" };
 
         public CartModule()
           : base("carts/")
@@ -37,7 +40,7 @@ namespace OnlineStore.RestApi.Modules
             Cart cart = carts.FirstOrDefault(c => c.Id == id);
             if (cart == null)
             {
-                return NotFoundResponse(id);
+                return CartNotFoundResponse(id);
             }
 
             return Negotiate
@@ -50,7 +53,7 @@ namespace OnlineStore.RestApi.Modules
             Cart cart = carts.FirstOrDefault(c => c.Id == id);
             if (cart == null)
             {
-                return NotFoundResponse(id);
+                return CartNotFoundResponse(id);
             }
 
             CouponDto couponDto = this.BindAndValidate<CouponDto>();
@@ -61,12 +64,21 @@ namespace OnlineStore.RestApi.Modules
                     .WithStatusCode(HttpStatusCode.BadRequest);
             }
 
+            if (couponCodes.Contains(couponDto.Code, StringComparer.OrdinalIgnoreCase))
+            {
+                cart.Discount = 5;
+                return Negotiate
+                    .WithHeader("Location", $"{Request.Url}")
+                    .WithStatusCode(HttpStatusCode.SeeOther);
+            }
+
             return Negotiate
                 .WithAllowedMediaRange("application/json")
-                .WithModel(couponDto);
+                .WithModel(new { Error = $"Coupon code = {couponDto.Code} was not found" })
+                .WithStatusCode(HttpStatusCode.NotFound);
         }
 
-        private Negotiator NotFoundResponse(int id)
+        private Negotiator CartNotFoundResponse(int id)
         {
             return Negotiate
                 .WithAllowedMediaRange("application/json")
