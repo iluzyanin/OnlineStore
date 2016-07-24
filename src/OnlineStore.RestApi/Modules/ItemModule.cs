@@ -8,7 +8,7 @@ using Nancy.Responses.Negotiation;
 using OnlineStore.Core.Models;
 using OnlineStore.RestApi.DataTransfer;
 
-namespace OnlineStore.RestApi
+namespace OnlineStore.RestApi.Modules
 {
     public class ItemModule : NancyModule
     {
