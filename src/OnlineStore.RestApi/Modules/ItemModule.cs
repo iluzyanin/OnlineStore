@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Validation;
 using Nancy.Responses.Negotiation;
+using OnlineStore.Core;
 using OnlineStore.Core.Models;
 using OnlineStore.RestApi.DataTransfer;
 
@@ -12,16 +12,13 @@ namespace OnlineStore.RestApi.Modules
 {
     public class ItemModule : NancyModule
     {
-        private static IList<Item> items = new List<Item>
-        {
-            new Item(1, "Apple", 3m),
-            new Item(2, "Banana", 1.4m),
-            new Item(3, "Orange", 2.8m),
-        };
+        private IItemRepository itemRepository;
 
-        public ItemModule()
+        public ItemModule(IItemRepository itemRepository)
             : base("/items")
         {
+            this.itemRepository = itemRepository;
+
             this.Get("/", _ => GetAllItems());
             this.Get("/{id}", parameters => GetItem(parameters.id));
             this.Post("/", parameters => CreateItem(parameters));
@@ -32,12 +29,12 @@ namespace OnlineStore.RestApi.Modules
         {
             return Negotiate
                 .WithAllowedMediaRange("application/json")
-                .WithModel(items);
+                .WithModel(this.itemRepository.GetAll());
         }
 
         public Negotiator GetItem(int id)
         {
-            Item item = items.FirstOrDefault(i => i.Id == id);
+            Item item = this.itemRepository.Get(id);
             if (item == null)
             {
                 return Negotiate
@@ -62,7 +59,9 @@ namespace OnlineStore.RestApi.Modules
                     .WithStatusCode(HttpStatusCode.BadRequest);
             }
 
-            Item existingItem = items.FirstOrDefault(i => i.Name.Equals(newItem.Name, StringComparison.CurrentCultureIgnoreCase));
+            Item existingItem = this.itemRepository
+                .GetAll()
+                .FirstOrDefault(i => i.Name.Equals(newItem.Name, StringComparison.CurrentCultureIgnoreCase));
             if (existingItem != null)
             {
                 return Negotiate
@@ -71,9 +70,7 @@ namespace OnlineStore.RestApi.Modules
                     .WithStatusCode(HttpStatusCode.BadRequest);
             }
 
-            int newId = items.Last().Id + 1;
-
-            items.Add(new Item(newId, newItem.Name, newItem.Price));
+            int newId = this.itemRepository.Add(new Item(newItem.Name, newItem.Price));
 
             return Negotiate
                 .WithHeader("Location", $"{Request.Url}/{newId}")
@@ -82,7 +79,7 @@ namespace OnlineStore.RestApi.Modules
 
         public Negotiator DeleteItem(int id)
         {
-            Item item = items.FirstOrDefault(i => i.Id == id);
+            Item item = this.itemRepository.GetAll().FirstOrDefault(i => i.Id == id);
             if (item == null)
             {
                 return Negotiate
@@ -91,7 +88,7 @@ namespace OnlineStore.RestApi.Modules
                     .WithStatusCode(HttpStatusCode.NotFound);
             }
 
-            items.Remove(item);
+            this.itemRepository.Delete(id);
 
             return Negotiate
                 .WithAllowedMediaRange("application/json")

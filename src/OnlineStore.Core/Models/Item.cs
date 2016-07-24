@@ -4,6 +4,12 @@ namespace OnlineStore.Core.Models
     {
         public Item() { }
 
+        public Item(string name, decimal price)
+        {
+            this.Name = name;
+            this.Price = price;
+        }
+
         public Item(int id, string name, decimal price)
         {
             this.Id = id;
