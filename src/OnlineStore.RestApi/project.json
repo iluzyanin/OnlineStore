@@ -21,5 +21,8 @@
   },
   "frameworks": {
     "netcoreapp1.1": {}
+  }, 
+  "publishOptions": {
+    "exclude": ["bin/**", "obj/**"]
   }
 }

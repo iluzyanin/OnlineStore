@@ -7,6 +7,6 @@ RUN dotnet restore
 
 RUN dotnet test test/OnlineStore.Tests
 
-EXPOSE 5000
+EXPOSE 5000/tcp
 
 ENTRYPOINT dotnet run -p src/OnlineStore.RestApi
