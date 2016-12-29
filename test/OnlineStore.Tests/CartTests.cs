@@ -17,7 +17,7 @@ namespace OnlineStore.Tests
             }
 
             [Test]
-            public void When_no_items_And_Should_return_zero()
+            public void When_no_items_Should_return_zero()
             {
                 // Act
                 decimal result = this.cart.CalculateTotalAmount();
